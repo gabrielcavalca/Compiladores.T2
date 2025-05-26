@@ -34,7 +34,7 @@ Primeiro, clone o repositório para uma pasta de sua escolha. Por exemplo, se vo
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/gabrielcavalca/Compiladores.T2](https://github.com/gabrielcavalca/Compiladores.T2) SEU_CAMINHO_PARA_O_PROJETO
+    git clone (https://github.com/gabrielcavalca/Compiladores.T2)
     ```
     *Exemplo:* `git clone https://github.com/gabrielcavalca/Compiladores.T2 C:\Users\SEU_USUARIO\Documents\Compiladores\Compiladores.T2`
 
