@@ -819,14 +819,16 @@ class LAParser ( Parser ):
         # Retorna o token COMENTARIO (opcional).
         def COMENTARIO(self):
             return self.getToken(LAParser.COMENTARIO, 0)
-    
+
+	# Retorna o contexto da regra 'declaracoes_locais' (variáveis locais, opcional).
         def declaracoes_locais(self):
             return self.getTypedRuleContext(LAParser.Declaracoes_locaisContext,0)
 
-
+        # Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_declaracao_funcao
 
+	# Métodos para o Listener Pattern.
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterDeclaracao_funcao" ):
                 listener.enterDeclaracao_funcao(self)
@@ -837,7 +839,7 @@ class LAParser ( Parser ):
 
 
 
-
+    # Implementação da regra de parsing 'declaracao_funcao'.
     def declaracao_funcao(self):
 
         localctx = LAParser.Declaracao_funcaoContext(self, self._ctx, self.state)
@@ -846,44 +848,51 @@ class LAParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 126
+	    # Espera o token 'funcao'.
             self.match(LAParser.T__3)
             self.state = 127
+            # Espera o IDENT (nome da função).
             self.match(LAParser.IDENT)
             self.state = 128
+	    # Espera o ABREPAR '('.
             self.match(LAParser.ABREPAR)
             self.state = 130
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==11 or _la==68:
+	    # Verifica se há parâmetros (opcional).
+            if _la==11 or _la==68: # 'var' ou IDENT
                 self.state = 129
                 self.parametros()
 
 
             self.state = 132
+	    # Espera o FECHAPAR ')'.
             self.match(LAParser.FECHAPAR)
             self.state = 133
+           # Espera o DOIS_PONTOS ':'.
             self.match(LAParser.DOIS_PONTOS)
             self.state = 134
+            # Consome a regra 'tipo_base' (tipo de retorno).
             self.tipo_base()
             self.state = 136
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==51:
+            # Verifica se há um COMENTARIO (opcional).
+            if _la==51: # COMENTARIO
                 self.state = 135
                 self.match(LAParser.COMENTARIO)
-
-
             self.state = 139
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==3:
+            # Verifica se há declarações locais (opcional).
+            if _la==3: # 'declare'
                 self.state = 138
                 self.declaracoes_locais()
-
-
             self.state = 141
+            # Consome a regra 'comandos' (o corpo da função).
             self.comandos()
             self.state = 142
+            # Espera o token 'fim_funcao'.
             self.match(LAParser.T__4)
         except RecognitionException as re:
             localctx.exception = re
@@ -893,7 +902,8 @@ class LAParser ( Parser ):
             self.exitRule()
         return localctx
 
-
+    # Contexto para a regra 'declaracao_constante'.
+    # Representa a declaração de uma constante, com seu nome, tipo e valor inicial.
     class Declaracao_constanteContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -901,29 +911,35 @@ class LAParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+       # Retorna o token IDENT (nome da constante).
         def IDENT(self):
             return self.getToken(LAParser.IDENT, 0)
 
+        # Retorna o token DOIS_PONTOS (':').
         def DOIS_PONTOS(self):
             return self.getToken(LAParser.DOIS_PONTOS, 0)
 
+        # Retorna o contexto da regra 'tipo_base' (tipo da constante).
         def tipo_base(self):
             return self.getTypedRuleContext(LAParser.Tipo_baseContext,0)
 
-
+        # Retorna o token IGUAL ('=').
         def IGUAL(self):
             return self.getToken(LAParser.IGUAL, 0)
 
+        # Retorna o contexto da regra 'valor_constante' (valor atribuído à constante).
         def valor_constante(self):
             return self.getTypedRuleContext(LAParser.Valor_constanteContext,0)
 
-
+        # Retorna o token COMENTARIO (opcional).
         def COMENTARIO(self):
             return self.getToken(LAParser.COMENTARIO, 0)
 
+        # Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_declaracao_constante
 
+        # Métodos para o Listener Pattern.
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterDeclaracao_constante" ):
                 listener.enterDeclaracao_constante(self)
@@ -934,30 +950,37 @@ class LAParser ( Parser ):
 
 
 
-
+    # Implementação da regra de parsing 'declaracao_constante'.
     def declaracao_constante(self):
 
         localctx = LAParser.Declaracao_constanteContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_declaracao_constante)
         self._la = 0 # Token type
         try:
-            self.enterOuterAlt(localctx, 1)
+           self.enterOuterAlt(localctx, 1)
             self.state = 144
+            # Espera o token 'constante'.
             self.match(LAParser.T__5)
             self.state = 145
+            # Espera o IDENT (nome da constante).
             self.match(LAParser.IDENT)
             self.state = 146
+            # Espera o DOIS_PONTOS ':'.
             self.match(LAParser.DOIS_PONTOS)
             self.state = 147
+            # Consome a regra 'tipo_base'.
             self.tipo_base()
             self.state = 148
+            # Espera o IGUAL '='.
             self.match(LAParser.IGUAL)
             self.state = 149
+            # Consome a regra 'valor_constante'.
             self.valor_constante()
             self.state = 151
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==51:
+            # Verifica se há um COMENTARIO (opcional).
+            if _la==51: # COMENTARIO
                 self.state = 150
                 self.match(LAParser.COMENTARIO)
 
@@ -970,7 +993,8 @@ class LAParser ( Parser ):
             self.exitRule()
         return localctx
 
-
+    # Contexto para a regra 'valor_constante'.
+    # Define os tipos de valores literais que uma constante pode assumir.
     class Valor_constanteContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -978,18 +1002,23 @@ class LAParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+        # Retorna o token NUM_INT (número inteiro).
         def NUM_INT(self):
             return self.getToken(LAParser.NUM_INT, 0)
 
+        # Retorna o token NUM_REAL (número real/ponto flutuante).
         def NUM_REAL(self):
             return self.getToken(LAParser.NUM_REAL, 0)
 
+        # Retorna o token CADEIA (string literal).
         def CADEIA(self):
             return self.getToken(LAParser.CADEIA, 0)
 
+        # Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_valor_constante
 
+        # Métodos para o Listener Pattern
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterValor_constante" ):
                 listener.enterValor_constante(self)
@@ -1000,7 +1029,8 @@ class LAParser ( Parser ):
 
 
 
-
+    # Implementação da regra de parsing 'valor_constante'.
+    # Permite um dos vários tipos de literais ou palavras-chave booleanas.
     def valor_constante(self):
 
         localctx = LAParser.Valor_constanteContext(self, self._ctx, self.state)
