@@ -1,5 +1,12 @@
 # Generated from LA.g4 by ANTLR 4.13.2
 # encoding: utf-8
+
+# Este arquivo Python foi gerado automaticamente pelo ANTLR 4.13.2 a partir da gramática 'LA.g4'.
+# Ele atua como o parser principal para a Linguagem de Algoritmos (LA),
+# convertendo o fluxo de tokens (gerado pelo lexer) em uma árvore de análise sintática.
+# Essa árvore é a representação estruturada do código-fonte, essencial para as fases
+# de análise semântica e geração de código.
+
 from antlr4 import *
 from io import StringIO
 import sys
@@ -8,6 +15,9 @@ if sys.version_info[1] > 5:
 else:
 	from typing.io import TextIO
 
+# A função serializedATN() retorna a representação serializada da ATN (Augmented Transition Network).
+# A ATN é um grafo que representa a gramática de forma compacta e eficiente,
+# usada pelo ANTLR para guiar o processo de análise sintática em tempo de execução.
 def serializedATN():
     return [
         4,1,70,499,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
@@ -193,16 +203,27 @@ def serializedATN():
         379,383,390,402,430,432,438,445,453,463,481,486,495
     ]
 
+# A classe LAParser é a implementação do parser ANTLR para a gramática LA.
+# Ela é responsável por analisar a sequência de tokens e construir a árvore de análise sintática.
 class LAParser ( Parser ):
 
+    # Define o nome do arquivo de gramática original.
     grammarFileName = "LA.g4"
 
+    # Carrega a ATN (Augmented Transition Network) serializada. A ATN é um modelo de estado
+    # finito que o parser utiliza para guiar sua análise, reconhecendo padrões definidos na gramática.
     atn = ATNDeserializer().deserialize(serializedATN())
 
+    # Converte as decisões da ATN em DFAs (Deterministic Finite Automata) para otimização do parsing.
+    # DFAs permitem decisões de parsing mais rápidas para regras sem ambiguidades.
     decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
 
+    # Um cache compartilhado para contextos de predição. Ajuda a otimizar o desempenho
+    # do parser ao evitar recalcular previsões para os mesmos estados de análise.
     sharedContextCache = PredictionContextCache()
 
+    # literalNames: Uma lista de strings literais que correspondem diretamente aos tokens.
+    # São os "nomes" dos tokens que representam palavras-chave e operadores fixos na linguagem.
     literalNames = [ "<INVALID>", "'fim_algoritmo'", "'algoritmo'", "'declare'", 
                      "'funcao'", "'fim_funcao'", "'constante'", "'verdadeiro'", 
                      "'falso'", "'procedimento'", "'fim_procedimento'", 
@@ -218,6 +239,9 @@ class LAParser ( Parser ):
                      "')'", "','", "':'", "'<-'", "'='", "<INVALID>", "<INVALID>", 
                      "'.'", "'&'", "<INVALID>", "'^'", "'..'" ]
 
+    # symbolicNames: Uma lista de nomes simbólicos para os tokens.
+    # Representam categorias de tokens (como identificadores, números, cadeias de texto)
+    # ou tokens que não possuem uma representação literal fixa mas são importantes semanticamente.
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
@@ -237,6 +261,8 @@ class LAParser ( Parser ):
                       "COLCHETES", "CIRCUNFLEXO", "PONTOS", "IDENT", "CARACTERE_INVALIDO", 
                       "ERRO" ]
 
+    # Definição das regras de parsing e seus índices.
+    # Cada número corresponde à ordem de definição da regra na gramática LA.g4.
     RULE_programa = 0
     RULE_declaracoes_preliminares = 1
     RULE_bloco_algoritmo = 2
@@ -286,6 +312,7 @@ class LAParser ( Parser ):
     RULE_chamada_funcao = 46
     RULE_lista_expressao = 47
 
+    # Lista dos nomes das regras, correspondendo aos índices acima.
     ruleNames =  [ "programa", "declaracoes_preliminares", "bloco_algoritmo", 
                    "corpo_algoritmo", "declaracao", "declaracao_funcao", 
                    "declaracao_constante", "valor_constante", "declaracao_procedimento", 
@@ -300,6 +327,7 @@ class LAParser ( Parser ):
                    "expressao_relacional", "expressao_aritmetica", "termo", 
                    "fator", "chamada_funcao", "lista_expressao" ]
 
+    # Mapeamento de tokens literais para seus valores inteiros (usado internamente pelo ANTLR).
     EOF = Token.EOF
     T__0=1
     T__1=2
@@ -372,6 +400,8 @@ class LAParser ( Parser ):
     CARACTERE_INVALIDO=69
     ERRO=70
 
+    # O construtor do parser.
+    # Inicializa o parser com o fluxo de tokens de entrada e configurações de saída.
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
         self.checkVersion("4.13.2")
@@ -380,7 +410,8 @@ class LAParser ( Parser ):
 
 
 
-
+    # Contexto para a regra 'programa'.
+    # Representa a estrutura de um programa completo na Linguagem de Algoritmos.
     class ProgramaContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -388,55 +419,69 @@ class LAParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+	# Retorna o contexto da regra 'bloco_algoritmo'. Um programa deve ter um bloco de algoritmo principal.
         def bloco_algoritmo(self):
             return self.getTypedRuleContext(LAParser.Bloco_algoritmoContext,0)
 
-
+	# Retorna o contexto da regra 'declaracoes_preliminares'. Estas são declarações opcionais
+        # que podem aparecer antes do bloco principal do algoritmo (funções, procedimentos, tipos).
         def declaracoes_preliminares(self):
             return self.getTypedRuleContext(LAParser.Declaracoes_preliminaresContext,0)
 
-
+	# Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_programa
 
+	# Métodos para o Listener Pattern:
+        # enterPrograma é chamado ao entrar na regra 'programa'.
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterPrograma" ):
                 listener.enterPrograma(self)
-
+        # exitPrograma é chamado ao sair da regra 'programa'.
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPrograma" ):
                 listener.exitPrograma(self)
 
-
-
-
+    # Implementação da regra de parsing 'programa'.
+    # Define a sequência esperada de tokens e sub-regras para formar um programa válido.
     def programa(self):
-
+        # Cria um novo contexto para esta regra.
         localctx = LAParser.ProgramaContext(self, self._ctx, self.state)
+	# Entra na regra 'programa'.
         self.enterRule(localctx, 0, self.RULE_programa)
         try:
+	    # Inicia o modo de alternativa externa, significando que esta é a primeira alternativa de uma regra.
             self.enterOuterAlt(localctx, 1)
+	    # Tenta sincronizar o manipulador de erros.
             self.state = 97
             self._errHandler.sync(self)
+	    # Prediz qual alternativa seguir (neste caso, se há declarações preliminares ou não).
             la_ = self._interp.adaptivePredict(self._input,0,self._ctx)
             if la_ == 1:
+		# Se houver, consome a regra 'declaracoes_preliminares'
                 self.state = 96
                 self.declaracoes_preliminares()
 
 
             self.state = 99
+	    # Consome a regra 'bloco_algoritmo'.
             self.bloco_algoritmo()
             self.state = 100
+	    # Espera o token 'fim_algoritmo'.
             self.match(LAParser.T__0)
         except RecognitionException as re:
+	    # Em caso de erro de reconhecimento, reporta e tenta recuperar.
             localctx.exception = re
             self._errHandler.reportError(self, re)
             self._errHandler.recover(self, re)
         finally:
+	    # Sai da regra, independentemente de sucesso ou falha.
             self.exitRule()
         return localctx
 
-
+    # Contexto para a regra 'declaracoes_preliminares'.
+    # Representa um conjunto de declarações (funções, procedimentos, tipos, constantes)
+    # que podem aparecer no início do programa.
     class Declaracoes_preliminaresContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -444,44 +489,46 @@ class LAParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+	# Retorna uma lista de contextos para a regra 'declaracao' (declarações de variáveis).
         def declaracao(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.DeclaracaoContext)
             else:
                 return self.getTypedRuleContext(LAParser.DeclaracaoContext,i)
 
-
+        # Retorna uma lista de contextos para a regra 'declaracao_tipo' (declarações de tipos customizados).
         def declaracao_tipo(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.Declaracao_tipoContext)
             else:
                 return self.getTypedRuleContext(LAParser.Declaracao_tipoContext,i)
 
-
+        # Retorna uma lista de contextos para a regra 'declaracao_procedimento' (declarações de procedimentos).
         def declaracao_procedimento(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.Declaracao_procedimentoContext)
             else:
                 return self.getTypedRuleContext(LAParser.Declaracao_procedimentoContext,i)
 
-
+        # Retorna uma lista de contextos para a regra 'declaracao_funcao' (declarações de funções).
         def declaracao_funcao(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.Declaracao_funcaoContext)
             else:
                 return self.getTypedRuleContext(LAParser.Declaracao_funcaoContext,i)
 
-
+        # Retorna uma lista de contextos para a regra 'declaracao_constante' (declarações de constantes).
         def declaracao_constante(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.Declaracao_constanteContext)
             else:
                 return self.getTypedRuleContext(LAParser.Declaracao_constanteContext,i)
 
-
+        # Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_declaracoes_preliminares
-
+		
+        # Métodos para o Listener Pattern.
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterDeclaracoes_preliminares" ):
                 listener.enterDeclaracoes_preliminares(self)
@@ -492,7 +539,8 @@ class LAParser ( Parser ):
 
 
 
-
+    # Implementação da regra de parsing 'declaracoes_preliminares'.
+    # Permite a repetição de diferentes tipos de declarações antes do bloco principal.
     def declaracoes_preliminares(self):
 
         localctx = LAParser.Declaracoes_preliminaresContext(self, self._ctx, self.state)
@@ -502,32 +550,35 @@ class LAParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 109
             self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4696) != 0):
+	    # Loop que permite múltiplas declarações de diferentes tipos.
+            _la = self._input.LA(1) # Obtém o tipo do próximo token.
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4696) != 0): # Condição que verifica se o próximo token é o início de uma das declarações permitidas.
                 self.state = 107
                 self._errHandler.sync(self)
                 token = self._input.LA(1)
-                if token in [3]:
+		# Seleciona qual tipo de declaração foi encontrada.
+                if token in [3]: # 'declare'
                     self.state = 102
                     self.declaracao()
                     pass
-                elif token in [12]:
+                elif token in [12]:  # 'tipo'
                     self.state = 103
                     self.declaracao_tipo()
                     pass
-                elif token in [9]:
+                elif token in [9]: # 'procedimento'
                     self.state = 104
                     self.declaracao_procedimento()
                     pass
-                elif token in [4]:
+                elif token in [4]:  # 'funcao'
                     self.state = 105
                     self.declaracao_funcao()
                     pass
-                elif token in [6]:
+                elif token in [6]:  # 'constante'
                     self.state = 106
                     self.declaracao_constante()
                     pass
                 else:
+		    # Se nenhum dos tokens esperados for encontrado, levanta uma exceção.
                     raise NoViableAltException(self)
 
                 self.state = 111
@@ -542,21 +593,23 @@ class LAParser ( Parser ):
             self.exitRule()
         return localctx
 
-
+    # Contexto para a regra 'bloco_algoritmo'.
+    # Representa o corpo principal do programa, iniciando com 'algoritmo'.
     class Bloco_algoritmoContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-
+        # Retorna o contexto da regra 'corpo_algoritmo', que contém os comandos e declarações dentro do bloco.
         def corpo_algoritmo(self):
             return self.getTypedRuleContext(LAParser.Corpo_algoritmoContext,0)
 
-
+        # Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_bloco_algoritmo
-
+		
+        # Métodos para o Listener Pattern.
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterBloco_algoritmo" ):
                 listener.enterBloco_algoritmo(self)
@@ -567,7 +620,7 @@ class LAParser ( Parser ):
 
 
 
-
+    # Implementação da regra de parsing 'bloco_algoritmo'.
     def bloco_algoritmo(self):
 
         localctx = LAParser.Bloco_algoritmoContext(self, self._ctx, self.state)
@@ -577,6 +630,7 @@ class LAParser ( Parser ):
             self.state = 112
             self.match(LAParser.T__1)
             self.state = 113
+	    # Consome a regra 'corpo_algoritmo'.
             self.corpo_algoritmo()
         except RecognitionException as re:
             localctx.exception = re
@@ -586,38 +640,41 @@ class LAParser ( Parser ):
             self.exitRule()
         return localctx
 
-
+    # Contexto para a regra 'corpo_algoritmo'.
+    # Representa o conteúdo principal do algoritmo, que pode incluir comandos e declarações.
     class Corpo_algoritmoContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-
+		
+        # Retorna uma lista de contextos para a regra 'comando'.
         def comando(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.ComandoContext)
             else:
                 return self.getTypedRuleContext(LAParser.ComandoContext,i)
 
-
+        # Retorna uma lista de contextos para a regra 'declaracao' (declarações de variáveis).
         def declaracao(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.DeclaracaoContext)
             else:
                 return self.getTypedRuleContext(LAParser.DeclaracaoContext,i)
 
-
+        # Retorna uma lista de contextos para a regra 'declaracao_constante'.
         def declaracao_constante(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LAParser.Declaracao_constanteContext)
             else:
                 return self.getTypedRuleContext(LAParser.Declaracao_constanteContext,i)
 
-
+        # Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_corpo_algoritmo
 
+	# Métodos para o Listener Pattern.
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterCorpo_algoritmo" ):
                 listener.enterCorpo_algoritmo(self)
@@ -628,7 +685,8 @@ class LAParser ( Parser ):
 
 
 
-
+    # Implementação da regra de parsing 'corpo_algoritmo'.
+    # Permite a repetição de comandos e algumas declarações dentro do corpo do algoritmo.
     def corpo_algoritmo(self):
 
         localctx = LAParser.Corpo_algoritmoContext(self, self._ctx, self.state)
@@ -638,20 +696,22 @@ class LAParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 120
             self._errHandler.sync(self)
+	    # Loop que permite comandos ou declarações.
             _la = self._input.LA(1)
             while (((_la) & ~0x3f) == 0 and ((1 << _la) & 53866397768) != 0) or _la==66 or _la==68:
                 self.state = 118
                 self._errHandler.sync(self)
                 token = self._input.LA(1)
+		# Seleciona qual item foi encontrado.
                 if token in [20, 21, 23, 25, 27, 31, 34, 35, 66, 68]:
                     self.state = 115
                     self.comando()
                     pass
-                elif token in [3]:
+                elif token in [3]: # 'declare'
                     self.state = 116
                     self.declaracao()
                     pass
-                elif token in [6]:
+                elif token in [6]: # 'constante'
                     self.state = 117
                     self.declaracao_constante()
                     pass
@@ -670,7 +730,8 @@ class LAParser ( Parser ):
             self.exitRule()
         return localctx
 
-
+    # Contexto para a regra 'declaracao'.
+    # Representa a declaração de uma ou mais variáveis.
     class DeclaracaoContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -678,13 +739,15 @@ class LAParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+	# Retorna o contexto da regra 'lista_variaveis', que define as variáveis a serem declaradas.
         def lista_variaveis(self):
             return self.getTypedRuleContext(LAParser.Lista_variaveisContext,0)
 
-
+        # Retorna o índice desta regra.
         def getRuleIndex(self):
             return LAParser.RULE_declaracao
 
+	# Métodos para o Listener Pattern.
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterDeclaracao" ):
                 listener.enterDeclaracao(self)
@@ -695,7 +758,7 @@ class LAParser ( Parser ):
 
 
 
-
+     # Implementação da regra de parsing 'declaracao'.
     def declaracao(self):
 
         localctx = LAParser.DeclaracaoContext(self, self._ctx, self.state)
@@ -703,8 +766,10 @@ class LAParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 123
+	    # Espera o token 'declare'.
             self.match(LAParser.T__2)
             self.state = 124
+	    # Consome a regra 'lista_variaveis'.
             self.lista_variaveis()
         except RecognitionException as re:
             localctx.exception = re
@@ -714,7 +779,8 @@ class LAParser ( Parser ):
             self.exitRule()
         return localctx
 
-
+    # Contexto para a regra 'declaracao_funcao'.
+    # Representa a declaração completa de uma função, incluindo nome, parâmetros, tipo de retorno e corpo.
     class Declaracao_funcaoContext(ParserRuleContext):
         __slots__ = 'parser'
 
@@ -722,33 +788,38 @@ class LAParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+	# Retorna o token IDENT (nome da função).
         def IDENT(self):
             return self.getToken(LAParser.IDENT, 0)
 
+	# Retorna o token ABREPAR ('(').
         def ABREPAR(self):
             return self.getToken(LAParser.ABREPAR, 0)
 
+	# Retorna o token FECHAPAR (')').
         def FECHAPAR(self):
             return self.getToken(LAParser.FECHAPAR, 0)
 
+	# Retorna o token DOIS_PONTOS (':').
         def DOIS_PONTOS(self):
             return self.getToken(LAParser.DOIS_PONTOS, 0)
 
+	# Retorna o contexto da regra 'tipo_base' (tipo de retorno da função).
         def tipo_base(self):
             return self.getTypedRuleContext(LAParser.Tipo_baseContext,0)
 
-
+        # Retorna o contexto da regra 'comandos' (corpo da função).
         def comandos(self):
             return self.getTypedRuleContext(LAParser.ComandosContext,0)
 
-
+        # Retorna o contexto da regra 'parametros' (parâmetros da função, opcional).
         def parametros(self):
             return self.getTypedRuleContext(LAParser.ParametrosContext,0)
 
-
+        # Retorna o token COMENTARIO (opcional).
         def COMENTARIO(self):
             return self.getToken(LAParser.COMENTARIO, 0)
-
+    
         def declaracoes_locais(self):
             return self.getTypedRuleContext(LAParser.Declaracoes_locaisContext,0)
 
