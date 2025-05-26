@@ -1,4 +1,17 @@
 # Generated from LA.g4 by ANTLR 4.13.2
+"""
+LA Lexer - Analisador Léxico Gerado pelo ANTLR
+
+Este arquivo define o lexer da linguagem 'LA' com base na gramática 'LA.g4'. 
+Ele é responsável por transformar a entrada textual em uma sequência de tokens 
+que serão posteriormente processados pelo parser.
+
+⚠️ Este arquivo é gerado automaticamente e não deve ser editado manualmente.
+
+Gerado por: ANTLR 4.13.2
+Dependências: antlr4-python-runtime
+"""
+
 from antlr4 import *
 from io import StringIO
 import sys
