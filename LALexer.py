@@ -2,11 +2,13 @@
 """
 LA Lexer - Analisador Léxico Gerado pelo ANTLR
 
-Este arquivo define o lexer da linguagem 'LA' com base na gramática 'LA.g4'. 
-Ele é responsável por transformar a entrada textual em uma sequência de tokens 
+Este arquivo define o lexer da linguagem 'LA' com base na gramática 'LA.g4'.
+Ele é responsável por transformar a entrada textual em uma sequência de tokens
 que serão posteriormente processados pelo parser.
 
 ⚠️ Este arquivo é gerado automaticamente e não deve ser editado manualmente.
+   Quaisquer modificações manuais podem ser sobrescritas em futuras gerações
+   a partir da gramática ANTLR (LA.g4).
 
 Gerado por: ANTLR 4.13.2
 Dependências: antlr4-python-runtime
@@ -22,6 +24,14 @@ else:
 
 
 def serializedATN():
+    """
+    Retorna a Representação Serializada da ATN (Automaton Transdutor Não Determinístico).
+
+    Esta função contém a representação compactada do autômato de estados
+    finitos que o lexer usa para reconhecer os tokens. É uma estrutura
+    interna gerada pelo ANTLR e essencial para o funcionamento do lexer.
+    Não deve ser modificada manualmente.
+    """
     return [
         4,0,70,823,6,-1,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,
         2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,
@@ -327,11 +337,32 @@ def serializedATN():
     ]
 
 class LALexer(Lexer):
+"""
+    LALexer - Classe do Analisador Léxico da Linguagem LA.
 
+    Esta classe herda de `antlr4.Lexer` e é o componente central para a
+    análise léxica da linguagem LA. Ela é responsável por consumir o
+    código fonte de entrada e produzir uma sequência de tokens, que são
+    as menores unidades significativas da linguagem.
+
+    A classe `LALexer` utiliza a ATN (Automaton Transdutor Não Determinístico)
+    definida em `serializedATN` para fazer o reconhecimento dos padrões lexicais.
+    """
+
+    # Atributo estático que armazena a ATN desserializada para o lexer.
+    # A ATN é o modelo computacional que guia o processo de tokenização.
     atn = ATNDeserializer().deserialize(serializedATN())
 
+    # Lista de DFAs (Autômatos Finitos Determinísticos) para as decisões do lexer.
+    # Cada DFA otimiza o reconhecimento de padrões para um conjunto específico de regras lexicais.
     decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
 
+    # Definições dos tipos de tokens (literals e symbolic names).
+    # Cada variável 'T__N' representa um token literal (palavra-chave, operador, etc.).
+    # Os nomes simbólicos são usados para referenciar os tokens de forma mais legível.
+    # Esta seção é essencial para o parser saber quais tipos de tokens esperar.
+
+    # PALAVRAS-CHAVE DA LINGUAGEM LA
     T__0 = 1
     T__1 = 2
     T__2 = 3
@@ -377,36 +408,41 @@ class LALexer(Lexer):
     T__42 = 43
     T__43 = 44
     T__44 = 45
-    PALAVRA_CHAVE = 46
-    NUM_INT = 47
-    NUM_REAL = 48
-    CADEIA_NAO_FECHADA = 49
-    CADEIA = 50
-    COMENTARIO = 51
-    COMENTARIO_NAO_FECHADO = 52
-    WS = 53
-    ASPAS = 54
-    ABREPAR = 55
-    FECHAPAR = 56
-    VIRG = 57
-    DOIS_PONTOS = 58
-    ATRIBUICAO = 59
-    IGUAL = 60
-    OP_RELACIONAL = 61
-    OP_ARITMETICO = 62
-    PONTO = 63
-    E_COMERCIAL = 64
-    COLCHETES = 65
-    CIRCUNFLEXO = 66
-    PONTOS = 67
-    IDENT = 68
-    CARACTERE_INVALIDO = 69
-    ERRO = 70
+    # REGRAS LÉXICAS GERAIS (definidas na gramática LA.g4)
+    PALAVRA_CHAVE = 46          # Qualquer palavra-chave da linguagem
+    NUM_INT = 47                # Números inteiros
+    NUM_REAL = 48               # Números reais (ponto flutuante)
+    CADEIA_NAO_FECHADA = 49     # Erro léxico: cadeia de caracteres que não foi fechada
+    CADEIA = 50                 # Cadeia de caracteres (strings)
+    COMENTARIO = 51             # Comentários de bloco (/* ... */)
+    COMENTARIO_NAO_FECHADO = 52 # Erro léxico: comentário de bloco que não foi fechado
+    WS = 53                     # Espaços em branco (ignorados pelo parser, mas reconhecidos pelo lexer)
+    ASPAS = 54                  # Caractere aspas (")
+    ABREPAR = 55                # Abre parênteses '('
+    FECHAPAR = 56               # Fecha parênteses ')'
+    VIRG = 57                   # Vírgula ','
+    DOIS_PONTOS = 58            # Dois pontos ':'
+    ATRIBUICAO = 59            # Operador de atribuição '<-'
+    IGUAL = 60                  # Operador de igualdade '='
+    OP_RELACIONAL = 61          # Operadores relacionais (>, <, >=, <=, <>)
+    OP_ARITMETICO = 62          # Operadores aritméticos (+, -, *, /)
+    PONTO = 63                  # Ponto '.'
+    E_COMERCIAL = 64            # E comercial '&'
+    COLCHETES = 65              # Colchetes ([])
+    CIRCUNFLEXO = 66            # Circunflexo '^'
+    PONTOS = 67                 # Pontos (..) para ranges
+    IDENT = 68                  # Identificadores (nomes de variáveis, funções, etc.)
+    CARACTERE_INVALIDO = 69     # Caractere que não pertence à linguagem LA
+    ERRO = 70                   # Token genérico para erros léxicos
 
+    # Define os canais de token. Por padrão, tokens vão para o canal DEFAULT_TOKEN_CHANNEL.
+    # HIDDEN é usado para tokens que devem ser ignorados pelo parser (ex: espaços em branco, comentários).
     channelNames = [ u"DEFAULT_TOKEN_CHANNEL", u"HIDDEN" ]
 
+    # Define os modos do lexer. Normalmente, apenas um modo padrão é usado.
     modeNames = [ "DEFAULT_MODE" ]
 
+    # Mapeamento de literais para seus respectivos nomes simbólicos (para debug e melhor legibilidade).
     literalNames = [ "<INVALID>",
             "'fim_algoritmo'", "'algoritmo'", "'declare'", "'funcao'", "'fim_funcao'", 
             "'constante'", "'verdadeiro'", "'falso'", "'procedimento'", 
@@ -419,6 +455,7 @@ class LALexer(Lexer):
             "'\"'", "'('", "')'", "','", "':'", "'<-'", "'='", "'.'", "'&'", 
             "'^'", "'..'" ]
 
+    # Mapeamento dos nomes simbólicos para seus identificadores (para uso interno do ANTLR).
     symbolicNames = [ "<INVALID>",
             "PALAVRA_CHAVE", "NUM_INT", "NUM_REAL", "CADEIA_NAO_FECHADA", 
             "CADEIA", "COMENTARIO", "COMENTARIO_NAO_FECHADO", "WS", "ASPAS", 
@@ -441,9 +478,21 @@ class LALexer(Lexer):
                   "PONTO", "E_COMERCIAL", "COLCHETES", "CIRCUNFLEXO", "PONTOS", 
                   "IDENT", "CARACTERE_INVALIDO", "ERRO" ]
 
+    # Nome do arquivo da gramática ANTLR de onde este lexer foi gerado.
     grammarFileName = "LA.g4"
 
     def __init__(self, input=None, output:TextIO = sys.stdout):
+        """
+        Construtor da classe LALexer.
+
+        Inicializa o lexer com a entrada de caracteres (código fonte) e
+        define a saída (geralmente stdout).
+
+        Parâmetros:
+            input (CharStream): O fluxo de caracteres de entrada a ser tokenizado.
+                                Geralmente é uma instância de `antlr4.InputStream`.
+            output (TextIO): O fluxo de saída para mensagens do lexer (padrão é sys.stdout).
+        """
         super().__init__(input, output)
         self.checkVersion("4.13.2")
         self._interp = LexerATNSimulator(self, self.atn, self.decisionsToDFA, PredictionContextCache())
